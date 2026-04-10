@@ -1,0 +1,172 @@
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+ 
+# ----------------------------
+# SPARK SESSION
+# ----------------------------
+spark = SparkSession.builder \
+    .appName("RetailStreamingConsumer") \
+    .getOrCreate()
+ 
+spark.sparkContext.setLogLevel("WARN")
+ 
+# ----------------------------
+# KINESIS CONFIG
+# ----------------------------
+STREAM_NAME = "pharma_kinesis_kritika"
+REGION = "ap-south-1"
+ENDPOINT = "https://kinesis.ap-south-1.amazonaws.com"
+ 
+# ----------------------------
+# READ FROM KINESIS (FIXED)
+# ----------------------------
+raw_df = spark.readStream \
+    .format("aws-kinesis") \
+    .option("kinesis.streamName", STREAM_NAME) \
+    .option("kinesis.region", REGION) \
+    .option("kinesis.endpointUrl", ENDPOINT) \
+    .option("kinesis.startingPosition", "LATEST") \
+    .load()
+ 
+# Convert binary to string
+json_df = raw_df.selectExpr("CAST(data AS STRING) as json_data")
+ 
+# ----------------------------
+# SCHEMA (SUPERSET)
+# ----------------------------
+schema = StructType([
+    StructField("source_type", StringType()),
+ 
+    # inventory
+    StructField("event_id", StringType()),
+    StructField("event_time", StringType()),
+    StructField("distributor_id", StringType()),
+    StructField("product_sku", StringType()),
+    StructField("batch_id", StringType()),
+    StructField("change_type", StringType()),
+    StructField("quantity_delta", StringType()),
+    StructField("current_stock", StringType()),
+ 
+    # sales
+    StructField("transaction_id", StringType()),
+    StructField("pharmacy_id", StringType()),
+    StructField("quantity_sold", StringType()),
+    StructField("unit_price", StringType()),
+    StructField("discount_pct", StringType()),
+    StructField("revenue", StringType()),
+    StructField("fulfillment_status", StringType()),
+ 
+    # temperature
+    StructField("sensor_id", StringType()),
+    StructField("temperature", StringType()),
+    StructField("unit", StringType()),
+    StructField("humidity", StringType())
+])
+ 
+# ----------------------------
+# PARSE JSON
+# ----------------------------
+parsed_df = json_df \
+    .select(from_json(col("json_data"), schema).alias("data")) \
+    .select("data.*")
+ 
+# Convert timestamp
+parsed_df = parsed_df.withColumn("event_time", to_timestamp("event_time"))
+ 
+# Partition column
+parsed_df = parsed_df.withColumn("partition_date", to_date("event_time"))
+ 
+# ----------------------------
+# SPLIT STREAMS
+# ----------------------------
+inventory_df = parsed_df.filter(col("source_type") == "inventory")
+sales_df = parsed_df.filter(col("source_type") == "sales")
+temperature_df = parsed_df.filter(col("source_type") == "temperature")
+ 
+# ============================================================
+# 🧊 TEMPERATURE CLEANING & VALIDATION
+# ============================================================
+temp_clean = temperature_df \
+    .withColumn("temperature", col("temperature").cast("double")) \
+    .withColumn("humidity", col("humidity").cast("double")) \
+    .withColumn(
+        "temperature_c",
+        when(col("unit") == "F", (col("temperature") - 32) * 5/9)
+        .otherwise(col("temperature"))
+    ) \
+    .withColumn(
+        "valid_temp",
+        (col("temperature_c") > -50) & (col("temperature_c") < 100)
+    ) \
+    .filter(col("valid_temp") == True)
+ 
+# ============================================================
+# 💊 SALES CLEANING & VALIDATION
+# ============================================================
+sales_clean = sales_df \
+    .withColumn("quantity_sold", col("quantity_sold").cast("int")) \
+    .withColumn("unit_price", col("unit_price").cast("double")) \
+    .withColumn("discount_pct", col("discount_pct").cast("double")) \
+    .withColumn("revenue", col("revenue").cast("double")) \
+    .withColumn(
+        "valid_sale",
+        (col("quantity_sold") > 0) & (col("unit_price") > 0)
+    ) \
+    .filter(col("valid_sale") == True)
+ 
+# ============================================================
+# 📦 INVENTORY CLEANING & VALIDATION
+# ============================================================
+inventory_clean = inventory_df \
+    .withColumn("quantity_delta", col("quantity_delta").cast("int")) \
+    .withColumn("current_stock", col("current_stock").cast("int")) \
+    .withColumn(
+        "valid_change",
+        col("change_type").isin("RECEIPT", "DISPATCH", "RETURN", "ADJUSTMENT")
+    ) \
+    .filter(col("valid_change") == True)
+ 
+# ----------------------------
+# S3 CONFIG
+# ----------------------------
+S3_BASE = "s3://pharma-data-lake-kritika/streaming_kinesis_processed_data/"
+ 
+# ============================================================
+# WRITE STREAMS (MICRO-BATCH: 30 sec)
+# ============================================================
+ 
+# Temperature
+temp_query = temp_clean.writeStream \
+    .format("parquet") \
+    .option("path", S3_BASE + "temperature_streaming_data/") \
+    .option("checkpointLocation", S3_BASE + "checkpoints/temperature/") \
+    .partitionBy("partition_date") \
+    .outputMode("append") \
+    .trigger(processingTime="120 seconds") \
+    .start()
+ 
+# Sales
+sales_query = sales_clean.writeStream \
+    .format("parquet") \
+    .option("path", S3_BASE + "sales_streaming_data/") \
+    .option("checkpointLocation", S3_BASE + "checkpoints/sales/") \
+    .partitionBy("partition_date") \
+    .outputMode("append") \
+    .trigger(processingTime="120 seconds") \
+    .start()
+ 
+# Inventory
+inventory_query = inventory_clean.writeStream \
+    .format("parquet") \
+    .option("path", S3_BASE + "inventory_streaming_data/") \
+    .option("checkpointLocation", S3_BASE + "checkpoints/inventory/") \
+    .partitionBy("partition_date") \
+    .outputMode("append") \
+    .trigger(processingTime="120 seconds") \
+    .start()
+ 
+# ----------------------------
+# KEEP STREAM RUNNING
+# ----------------------------
+spark.streams.awaitAnyTermination()
