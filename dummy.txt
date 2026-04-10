@@ -1,341 +1,238 @@
-spark-sql (pharma_streaming_db)> exit;
-[hadoop@ip-172-31-27-188 ~]$ spark-submit --jars spark-sql-kinesis_2.12-1.2.0_spark-3.0.jar consumer.py
-26/04/10 09:40:55 INFO SparkContext: Running Spark version 3.4.1-amzn-2
-26/04/10 09:40:55 INFO ResourceUtils: ==============================================================
-26/04/10 09:40:55 INFO ResourceUtils: No custom resources configured for spark.driver.
-26/04/10 09:40:55 INFO ResourceUtils: ==============================================================
-26/04/10 09:40:55 INFO SparkContext: Submitted application: RetailStreamingConsumer
-26/04/10 09:40:56 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 2, script: , vendor: , memory -> name: memory, amount: 4921, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
-26/04/10 09:40:56 INFO ResourceProfile: Limiting resource is cpus at 2 tasks per executor
-26/04/10 09:40:56 INFO ResourceProfileManager: Added ResourceProfile id: 0
-26/04/10 09:40:56 INFO SecurityManager: Changing view acls to: hadoop
-26/04/10 09:40:56 INFO SecurityManager: Changing modify acls to: hadoop
-26/04/10 09:40:56 INFO SecurityManager: Changing view acls groups to:
-26/04/10 09:40:56 INFO SecurityManager: Changing modify acls groups to:
-26/04/10 09:40:56 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: hadoop; groups with view permissions: EMPTY; users with modify permissions: hadoop; groups with modify permissions: EMPTY
-26/04/10 09:40:56 INFO Utils: Successfully started service 'sparkDriver' on port 41937.
-26/04/10 09:40:56 INFO SparkEnv: Registering MapOutputTracker
-26/04/10 09:40:56 INFO SparkEnv: Registering BlockManagerMaster
-26/04/10 09:40:56 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
-26/04/10 09:40:56 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
-26/04/10 09:40:56 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
-26/04/10 09:40:56 INFO DiskBlockManager: Created local directory at /mnt/tmp/blockmgr-2bcd355a-2b4b-4a2e-a89c-ded3fbb96408
-26/04/10 09:40:56 INFO MemoryStore: MemoryStore started with capacity 912.3 MiB
-26/04/10 09:40:56 INFO SparkEnv: Registering OutputCommitCoordinator
-26/04/10 09:40:56 INFO SubResultCacheManager: Sub-result caches are disabled.
-26/04/10 09:40:56 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
-26/04/10 09:40:56 INFO Utils: Successfully started service 'SparkUI' on port 4040.
-26/04/10 09:40:57 INFO Utils: Using 25 preallocated executors (minExecutors: 0). Set spark.dynamicAllocation.preallocateExecutors to `false` disable executor preallocation.
-26/04/10 09:40:57 INFO DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at ip-172-31-27-188.ap-south-1.compute.internal/172.31.27.188:8032
-26/04/10 09:40:57 INFO Configuration: resource-types.xml not found
-26/04/10 09:40:57 INFO ResourceUtils: Unable to find 'resource-types.xml'.
-26/04/10 09:40:57 INFO Client: Verifying our application has not requested more than the maximum memory capability of the cluster (11712 MB per container)
-26/04/10 09:40:57 INFO Client: Will allocate AM container, with 896 MB memory including 384 MB overhead
-26/04/10 09:40:57 INFO Client: Setting up container launch context for our AM
-26/04/10 09:40:57 INFO Client: Setting up the launch environment for our AM container
-26/04/10 09:40:57 INFO Client: Preparing resources for our AM container
-26/04/10 09:40:57 WARN Client: Neither spark.yarn.jars nor spark.yarn.archive is set, falling back to uploading libraries under SPARK_HOME.
-26/04/10 09:41:00 INFO Client: Uploading resource file:/mnt/tmp/spark-f78e988a-f9f4-4bab-9f20-cb18f3cbb78b/__spark_libs__7680997414326961775.zip -> hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hadoop/.sparkStaging/application_1775799336076_0022/__spark_libs__7680997414326961775.zip
-26/04/10 09:41:01 INFO Client: Uploading resource file:/home/hadoop/spark-sql-kinesis_2.12-1.2.0_spark-3.0.jar -> hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hadoop/.sparkStaging/application_1775799336076_0022/spark-sql-kinesis_2.12-1.2.0_spark-3.0.jar
-26/04/10 09:41:01 INFO Client: Uploading resource file:/etc/spark/conf.dist/hive-site.xml -> hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hadoop/.sparkStaging/application_1775799336076_0022/hive-site.xml
-26/04/10 09:41:01 INFO Client: Uploading resource file:/etc/hudi/conf.dist/hudi-defaults.conf -> hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hadoop/.sparkStaging/application_1775799336076_0022/hudi-defaults.conf
-26/04/10 09:41:01 INFO Client: Uploading resource file:/usr/lib/spark/python/lib/pyspark.zip -> hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hadoop/.sparkStaging/application_1775799336076_0022/pyspark.zip
-26/04/10 09:41:01 INFO Client: Uploading resource file:/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip -> hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hadoop/.sparkStaging/application_1775799336076_0022/py4j-0.10.9.7-src.zip
-26/04/10 09:41:02 INFO Client: Uploading resource file:/mnt/tmp/spark-f78e988a-f9f4-4bab-9f20-cb18f3cbb78b/__spark_conf__93517024829687441.zip -> hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hadoop/.sparkStaging/application_1775799336076_0022/__spark_conf__.zip
-26/04/10 09:41:02 INFO SecurityManager: Changing view acls to: hadoop
-26/04/10 09:41:02 INFO SecurityManager: Changing modify acls to: hadoop
-26/04/10 09:41:02 INFO SecurityManager: Changing view acls groups to:
-26/04/10 09:41:02 INFO SecurityManager: Changing modify acls groups to:
-26/04/10 09:41:02 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: hadoop; groups with view permissions: EMPTY; users with modify permissions: hadoop; groups with modify permissions: EMPTY
-26/04/10 09:41:02 INFO Client: Submitting application application_1775799336076_0022 to ResourceManager
-26/04/10 09:41:02 INFO YarnClientImpl: Submitted application application_1775799336076_0022
-26/04/10 09:41:03 INFO Client: Application report for application_1775799336076_0022 (state: ACCEPTED)
-26/04/10 09:41:03 INFO Client:
-         client token: N/A
-         diagnostics: AM container is launched, waiting for AM container to Register with RM
-         ApplicationMaster host: N/A
-         ApplicationMaster RPC port: -1
-         queue: default
-         start time: 1775814062579
-         final status: UNDEFINED
-         tracking URL: http://ip-172-31-27-188.ap-south-1.compute.internal:20888/proxy/application_1775799336076_0022/
-         user: hadoop
-26/04/10 09:41:04 INFO Client: Application report for application_1775799336076_0022 (state: ACCEPTED)
-26/04/10 09:41:05 INFO Client: Application report for application_1775799336076_0022 (state: ACCEPTED)
-26/04/10 09:41:06 INFO Client: Application report for application_1775799336076_0022 (state: ACCEPTED)
-26/04/10 09:41:07 INFO Client: Application report for application_1775799336076_0022 (state: ACCEPTED)
-26/04/10 09:41:08 INFO YarnClientSchedulerBackend: Add WebUI Filter. org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter, Map(PROXY_HOSTS -> ip-172-31-27-188.ap-south-1.compute.internal, PROXY_URI_BASES -> http://ip-172-31-27-188.ap-south-1.compute.internal:20888/proxy/application_1775799336076_0022), /proxy/application_1775799336076_0022
-26/04/10 09:41:08 INFO YarnSchedulerBackend$YarnSchedulerEndpoint: ApplicationMaster registered as NettyRpcEndpointRef(spark-client://YarnAM)
-26/04/10 09:41:08 INFO Client: Application report for application_1775799336076_0022 (state: RUNNING)
-26/04/10 09:41:08 INFO Client:
-         client token: N/A
-         diagnostics: N/A
-         ApplicationMaster host: 172.31.27.188
-         ApplicationMaster RPC port: -1
-         queue: default
-         start time: 1775814062579
-         final status: UNDEFINED
-         tracking URL: http://ip-172-31-27-188.ap-south-1.compute.internal:20888/proxy/application_1775799336076_0022/
-         user: hadoop
-26/04/10 09:41:08 INFO YarnClientSchedulerBackend: Application application_1775799336076_0022 has started running.
-26/04/10 09:41:08 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 43437.
-26/04/10 09:41:08 INFO NettyBlockTransferService: Server created on ip-172-31-27-188.ap-south-1.compute.internal:43437
-26/04/10 09:41:08 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
-26/04/10 09:41:08 INFO BlockManager: external shuffle service port = 7337
-26/04/10 09:41:08 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, ip-172-31-27-188.ap-south-1.compute.internal, 43437, None)
-26/04/10 09:41:08 INFO BlockManagerMasterEndpoint: Registering block manager ip-172-31-27-188.ap-south-1.compute.internal:43437 with 912.3 MiB RAM, BlockManagerId(driver, ip-172-31-27-188.ap-south-1.compute.internal, 43437, None)
-26/04/10 09:41:08 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, ip-172-31-27-188.ap-south-1.compute.internal, 43437, None)
-26/04/10 09:41:08 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, ip-172-31-27-188.ap-south-1.compute.internal, 43437, None)
-26/04/10 09:41:08 INFO SingleEventLogFileWriter: Logging events to hdfs:/var/log/spark/apps/application_1775799336076_0022.inprogress
-26/04/10 09:41:09 INFO Utils: Using 25 preallocated executors (minExecutors: 0). Set spark.dynamicAllocation.preallocateExecutors to `false` disable executor preallocation.
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /jobs: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /jobs/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /jobs/job: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /jobs/job/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /stages: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /stages/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /stages/stage: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /stages/stage/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /stages/pool: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /stages/pool/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /storage: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /storage/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /storage/rdd: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /storage/rdd/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /environment: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /environment/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /executors: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /executors/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /executors/threadDump: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /executors/threadDump/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /static: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /api: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /jobs/job/kill: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /stages/stage/kill: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO ServerInfo: Adding filter to /metrics/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/04/10 09:41:09 INFO YarnClientSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
-26/04/10 09:41:14 INFO HiveConf: Found configuration file file:/etc/spark/conf.dist/hive-site.xml
-26/04/10 09:41:14 WARN HiveConf: HiveConf of name hive.server2.thrift.url does not exist
-26/04/10 09:41:14 INFO metastore: Trying to connect to metastore with URI thrift://ip-172-31-27-188.ap-south-1.compute.internal:9083
-26/04/10 09:41:14 INFO metastore: Opened a connection to metastore, current connections: 1
-26/04/10 09:41:14 INFO metastore: Connected to metastore.
-Traceback (most recent call last):
-  File "/home/hadoop/consumer.py", line 132, in <module>
-    .toTable("pharma_streaming_db.temperature_streaming")
-  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/streaming/readwriter.py", line 1477, in toTable
-  File "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1323, in __call__
-  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 175, in deco
-pyspark.errors.exceptions.captured.AnalysisException: The input source(parquet) is different from the table pharma_streaming_db.temperature_streaming's data source provider(PARQUET).
-[hadoop@ip-172-31-27-188 ~
+hive> use pharma_db_kritika;
+OK
+Time taken: 0.008 seconds
+hive> SELECT controlled_flag, COUNT(*)
+    > FROM product_master_clean
+    > GROUP BY controlled_flag;
+Query ID = hadoop_20260410114429_4c1f8725-d1df-4a2e-8f0b-5e8ecb4993f0
+Total jobs = 1
+Launching Job 1 out of 1
+Status: Running (Executing on YARN cluster with App id application_1775799336076_0032)
 
+Map 1: -/-      Reducer 2: 0/2
+Map 1: 0/1      Reducer 2: 0/2
+Map 1: 0(+1)/1  Reducer 2: 0/2
+Map 1: 1/1      Reducer 2: 0(+1)/2
+Map 1: 1/1      Reducer 2: 2/2
+OK
+false   60
+Time taken: 4.568 seconds, Fetched: 1 row(s)
+hive> drop table  product_master_clean;
+OK
+Time taken: 0.058 seconds
+hive> CREATE TABLE product_master_clean (
+    >     product_sku STRING,
+    >     product_name STRING,
+    >     category STRING,
+    >     dosage_form STRING,
+    >     strength STRING,
+    >     controlled_flag BOOLEAN,
+    >     cold_chain_required BOOLEAN,
+    >     min_temp_c DOUBLE,
+    >     max_temp_c DOUBLE,
+    >     reorder_point_units INT,
+    >     unit_price DOUBLE
+    > )
+    > STORED AS PARQUET;
+OK
+Time taken: 0.029 seconds
+hive> INSERT OVERWRITE TABLE product_master_clean
+    > SELECT
+    >     product_sku,
+    >     product_name,
+    >     category,
+    >     dosage_form,
+    >     strength,
+    >
+    >     /* Controlled drug flag */
+    >     CASE
+    >         WHEN LOWER(TRIM(controlled_flag)) = 'true' THEN TRUE
+    >         ELSE FALSE
+    >     END AS controlled_flag,
+    >
+    >     /* Cold chain requirement */
+    >     CASE
+    >         WHEN LOWER(TRIM(cold_chain_required)) = 'true' THEN TRUE
+    >         ELSE FALSE
+    >     END AS cold_chain_required,
+    >
+    >     /* Temperature handling */
+    >     CASE
+    >         WHEN CAST(min_temp_c AS DOUBLE) = 0.0 THEN NULL
+    >         ELSE CAST(min_temp_c AS DOUBLE)
+    >     END AS min_temp_c,
+    >
+    >     CASE
+    >         WHEN CAST(max_temp_c AS DOUBLE) = 0.0 THEN NULL
+    >         ELSE CAST(max_temp_c AS DOUBLE)
+    >     END AS max_temp_c,
+    >
+    >     CAST(NULLIF(TRIM(reorder_point_units), '') AS INT) AS reorder_point_units,
+    >     CAST(NULLIF(TRIM(unit_price_mrp_inr), '') AS DOUBLE) AS unit_price
+    >
+    > FROM product_master_raw;
+Query ID = hadoop_20260410115004_3138eedd-0e43-4501-8e81-4dcf40eecd49
+Total jobs = 1
+Launching Job 1 out of 1
+Tez session was closed. Reopening...
+Session re-established.
+Session re-established.
+Status: Running (Executing on YARN cluster with App id application_1775799336076_0033)
 
+Map 1: -/-      Reducer 2: 0/1
+Map 1: 0/1      Reducer 2: 0/1
+Map 1: 0(+1)/1  Reducer 2: 0/1
+Map 1: 1/1      Reducer 2: 0(+1)/1
+Map 1: 1/1      Reducer 2: 1/1
+Loading data to table pharma_db_kritika.product_master_clean
+OK
+Time taken: 15.053 seconds
+hive> select * from product_master_clean;
+OK
+SKU000  Vaccine_Drug_SKU000     Injection       250mg   True    false   false   85.0    387.0   NULL    NULL
+SKU001  Analgesic_Drug_SKU001   Capsule 500mg   True    false   false   57.0    57.0    NULL    NULL
+SKU002  Analgesic_Drug_SKU002   Tablet  1g      False   false   false   106.0   239.0   NULL    NULL
+SKU003  Antibiotic_Drug_SKU003  Tablet  1g      False   false   false   137.0   152.0   NULL    NULL
+SKU004  Analgesic_Drug_SKU004   Tablet  500mg   True    false   false   141.0   443.0   NULL    NULL
+SKU005  Antibiotic_Drug_SKU005  Injection       1g      True    false   false   146.0   50.0    NULL    NULL
+SKU006  Antibiotic_Drug_SKU006  Injection       1g      True    false   false   67.0    33.0    NULL    NULL
+SKU007  Vaccine_Drug_SKU007     Tablet  250mg   True    false   false   147.0   152.0   NULL    NULL
+SKU008  Antibiotic_Drug_SKU008  Injection       250mg   False   false   false   68.0    321.0   NULL    NULL
+SKU009  Vaccine_Drug_SKU009     Tablet  250mg   False   false   false   147.0   148.0   NULL    NULL
+SKU010  Cardiac_Drug_SKU010     Capsule 500mg   True    false   false   108.0   430.0   NULL    NULL
+SKU011  Analgesic_Drug_SKU011   Tablet  1g      False   false   false   104.0   345.0   NULL    NULL
+SKU012  Antibiotic_Drug_SKU012  Tablet  500mg   True    false   false   113.0   391.0   NULL    NULL
+SKU013  Antibiotic_Drug_SKU013  Capsule 500mg   False   false   false   106.0   80.0    NULL    NULL
+SKU014  Antibiotic_Drug_SKU014  Tablet  250mg   True    false   false   158.0   315.0   NULL    NULL
+SKU015  Analgesic_Drug_SKU015   Capsule 500mg   True    false   false   79.0    359.0   NULL    NULL
+SKU016  Cardiac_Drug_SKU016     Injection       250mg   False   false   false   161.0   90.0    NULL    NULL
+SKU017  Antibiotic_Drug_SKU017  Injection       1g      True    false   false   179.0   477.0   NULL    NULL
+SKU018  Analgesic_Drug_SKU018   Capsule 1g      True    false   false   89.0    201.0   NULL    NULL
+SKU019  Vaccine_Drug_SKU019     Capsule 250mg   False   false   false   175.0   19.0    NULL    NULL
+SKU020  Analgesic_Drug_SKU020   Injection       250mg   True    false   false   111.0   459.0   NULL    NULL
+SKU021  Antibiotic_Drug_SKU021  Tablet  1g      True    false   false   82.0    347.0   NULL    NULL
+SKU022  Antibiotic_Drug_SKU022  Capsule 500mg   True    false   false   188.0   396.0   NULL    NULL
+SKU023  Vaccine_Drug_SKU023     Injection       500mg   False   false   false   162.0   470.0   NULL    NULL
+SKU024  Antibiotic_Drug_SKU024  Injection       250mg   True    false   false   200.0   122.0   NULL    NULL
+SKU025  Analgesic_Drug_SKU025   Tablet  250mg   False   false   false   68.0    273.0   NULL    NULL
+SKU026  Analgesic_Drug_SKU026   Tablet  1g      False   false   false   112.0   411.0   NULL    NULL
+SKU027  Antibiotic_Drug_SKU027  Capsule 500mg   False   false   false   158.0   220.0   NULL    NULL
+SKU028  Antibiotic_Drug_SKU028  Capsule 250mg   True    false   false   153.0   382.0   NULL    NULL
+SKU029  Antibiotic_Drug_SKU029  Tablet  1g      False   false   false   85.0    226.0   NULL    NULL
+Time taken: 0.051 seconds, Fetched: 30 row(s)
+hive> truncate table product_master_clean;
+OK
+Time taken: 0.118 seconds
+hive> INSERT INTO product_master_clean
+    > SELECT
+    >     product_sku,
+    >     product_name,
+    >     category,
+    >     dosage_form,
+    >     strength,
+    >
+    >     CASE
+    >         WHEN LOWER(TRIM(controlled_flag)) IN ('true', '1') THEN TRUE
+    >         ELSE FALSE
+    >     END AS controlled_flag,
+    >
+    >     CASE
+    >         WHEN LOWER(TRIM(cold_chain_required)) IN ('true', '1') THEN TRUE
+    >         ELSE FALSE
+    >     END AS cold_chain_required,
+    >
+    >     CASE
+    >         WHEN CAST(min_temp_c AS DOUBLE) = 0.0 THEN NULL
+    >         ELSE CAST(min_temp_c AS DOUBLE)
+    >     END AS min_temp_c,
+    >
+    >     CASE
+    >         WHEN CAST(max_temp_c AS DOUBLE) = 0.0 THEN NULL
+    >         ELSE CAST(max_temp_c AS DOUBLE)
+    >     END AS max_temp_c,
+    >
+    >     CAST(NULLIF(TRIM(reorder_point_units), '') AS INT) AS reorder_point_units,
+    >
+    >     CAST(NULLIF(TRIM(unit_price_mrp_inr), '') AS DOUBLE) AS unit_price
+    >
+    > FROM product_master_raw;
+Query ID = hadoop_20260410115307_79b0c765-a881-462a-b08a-4f50ab0f8016
+Total jobs = 1
+Launching Job 1 out of 1
+Status: Running (Executing on YARN cluster with App id application_1775799336076_0033)
 
-CREATE DATABASE IF NOT EXISTS pharma_streaming_db;
-
-use pharma_streaming_db;
-
-CREATE TABLE pharma_streaming_db.temperature_streaming (
-    sensor_id STRING,
-    temperature DOUBLE,
-    humidity DOUBLE,
-    temperature_c DOUBLE,
-    unit STRING,
-    event_time TIMESTAMP,
-    partition_date DATE
-)
-USING PARQUET
-PARTITIONED BY (partition_date)
-LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis/temperature';
-
-CREATE TABLE pharma_streaming_db.sales_streaming (
-    transaction_id STRING,
-    pharmacy_id STRING,
-    quantity_sold INT,
-    unit_price DOUBLE,
-    discount_pct DOUBLE,
-    revenue DOUBLE,
-    fulfillment_status STRING,
-    event_time TIMESTAMP,
-    partition_date DATE
-)
-USING PARQUET
-PARTITIONED BY (partition_date)
-LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis/sales';
-
-
-CREATE TABLE pharma_streaming_db.inventory_streaming (
-    event_id STRING,
-    distributor_id STRING,
-    product_sku STRING,
-    batch_id STRING,
-    change_type STRING,
-    quantity_delta INT,
-    current_stock INT,
-    event_time TIMESTAMP,
-    partition_date DATE
-)
-USING PARQUET
-PARTITIONED BY (partition_date)
-LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis/inventory';
-
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
-from pyspark.sql.types import *
- 
-# ----------------------------
-# SPARK SESSION WITH HIVE
-# ----------------------------
-spark = SparkSession.builder \
-    .appName("RetailStreamingConsumer") \
-    .enableHiveSupport() \
-    .config("spark.sql.shuffle.partitions", "50") \
-    .getOrCreate()
- 
-spark.sparkContext.setLogLevel("WARN")
- 
-# ----------------------------
-# KINESIS CONFIG
-# ----------------------------
-STREAM_NAME = "pharma_kinesis_kritika"
-REGION = "ap-south-1"
-ENDPOINT = "https://kinesis.ap-south-1.amazonaws.com"
- 
-# ----------------------------
-# READ FROM KINESIS
-# ----------------------------
-raw_df = spark.readStream \
-    .format("aws-kinesis") \
-    .option("kinesis.streamName", STREAM_NAME) \
-    .option("kinesis.region", REGION) \
-    .option("kinesis.endpointUrl", ENDPOINT) \
-    .option("kinesis.startingPosition", "LATEST") \
-    .load()
- 
-# Convert binary to string
-json_df = raw_df.selectExpr("CAST(data AS STRING) as json_data")
- 
-# ----------------------------
-# SCHEMA
-# ----------------------------
-schema = StructType([
-    StructField("source_type", StringType()),
- 
-    # inventory
-    StructField("event_id", StringType()),
-    StructField("event_time", StringType()),
-    StructField("distributor_id", StringType()),
-    StructField("product_sku", StringType()),
-    StructField("batch_id", StringType()),
-    StructField("change_type", StringType()),
-    StructField("quantity_delta", StringType()),
-    StructField("current_stock", StringType()),
- 
-    # sales
-    StructField("transaction_id", StringType()),
-    StructField("pharmacy_id", StringType()),
-    StructField("quantity_sold", StringType()),
-    StructField("unit_price", StringType()),
-    StructField("discount_pct", StringType()),
-    StructField("revenue", StringType()),
-    StructField("fulfillment_status", StringType()),
- 
-    # temperature
-    StructField("sensor_id", StringType()),
-    StructField("temperature", StringType()),
-    StructField("unit", StringType()),
-    StructField("humidity", StringType())
-])
- 
-# ----------------------------
-# PARSE JSON
-# ----------------------------
-parsed_df = json_df \
-    .select(from_json(col("json_data"), schema).alias("data")) \
-    .select("data.*")
- 
-# Convert timestamp
-parsed_df = parsed_df.withColumn("event_time", to_timestamp("event_time"))
- 
-# Partition column
-parsed_df = parsed_df.withColumn("partition_date", to_date("event_time"))
- 
-# ----------------------------
-# SPLIT STREAMS
-# ----------------------------
-inventory_df = parsed_df.filter(col("source_type") == "inventory")
-sales_df = parsed_df.filter(col("source_type") == "sales")
-temperature_df = parsed_df.filter(col("source_type") == "temperature")
- 
-# ============================================================
-# TEMPERATURE CLEANING
-# ============================================================
-temp_clean = temperature_df \
-    .withColumn("temperature", col("temperature").cast("double")) \
-    .withColumn("humidity", col("humidity").cast("double")) \
-    .withColumn(
-        "temperature_c",
-        when(col("unit") == "F", (col("temperature") - 32) * 5/9)
-        .otherwise(col("temperature"))
-    ) \
-    .filter((col("temperature_c") > -50) & (col("temperature_c") < 100)) \
-    .select("sensor_id", "temperature", "humidity", "temperature_c", "unit", "event_time", "partition_date")
- 
-# ============================================================
-# SALES CLEANING
-# ============================================================
-sales_clean = sales_df \
-    .withColumn("quantity_sold", col("quantity_sold").cast("int")) \
-    .withColumn("unit_price", col("unit_price").cast("double")) \
-    .withColumn("discount_pct", col("discount_pct").cast("double")) \
-    .withColumn("revenue", col("revenue").cast("double")) \
-    .filter((col("quantity_sold") > 0) & (col("unit_price") > 0)) \
-    .select("transaction_id", "pharmacy_id", "quantity_sold", "unit_price", "discount_pct", "revenue", "fulfillment_status", "event_time", "partition_date")
- 
-# ============================================================
-# INVENTORY CLEANING
-# ============================================================
-inventory_clean = inventory_df \
-    .withColumn("quantity_delta", col("quantity_delta").cast("int")) \
-    .withColumn("current_stock", col("current_stock").cast("int")) \
-    .filter(col("change_type").isin("RECEIPT", "DISPATCH", "RETURN", "ADJUSTMENT")) \
-    .select("event_id", "distributor_id", "product_sku", "batch_id", "change_type", "quantity_delta", "current_stock", "event_time", "partition_date")
- 
-# ============================================================
-# WRITE TO HIVE TABLES (MICRO-BATCH)
-# ============================================================
- 
-# Temperature
-temp_query = temp_clean.writeStream \
-    .outputMode("append") \
-    .format("parquet") \
-    .option("checkpointLocation", "s3://pharma-data-lake-kritika/checkpoints/temperature/") \
-    .partitionBy("partition_date") \
-    .trigger(processingTime="120 seconds") \
-    .toTable("pharma_streaming_db.temperature_streaming")
- 
-# Sales
-sales_query = sales_clean.writeStream \
-    .outputMode("append") \
-    .format("parquet") \
-    .option("checkpointLocation", "s3://pharma-data-lake-kritika/checkpoints/sales/") \
-    .partitionBy("partition_date") \
-    .trigger(processingTime="120 seconds") \
-    .toTable("pharma_streaming_db.sales_streaming")
- 
-# Inventory
-inventory_query = inventory_clean.writeStream \
-    .outputMode("append") \
-    .format("parquet") \
-    .option("checkpointLocation", "s3://pharma-data-lake-kritika/checkpoints/inventory/") \
-    .partitionBy("partition_date") \
-    .trigger(processingTime="120 seconds") \
-    .toTable("pharma_streaming_db.inventory_streaming")
- 
-# ----------------------------
-# KEEP STREAM RUNNING
-# ----------------------------
-spark.streams.awaitAnyTermination()
-
- 
-
+Map 1: -/-      Reducer 2: 0/1
+Map 1: 0/1      Reducer 2: 0/1
+Map 1: 0(+1)/1  Reducer 2: 0/1
+Map 1: 1/1      Reducer 2: 0(+1)/1
+Map 1: 1/1      Reducer 2: 1/1
+Loading data to table pharma_db_kritika.product_master_clean
+OK
+Time taken: 5.622 seconds
+hive> select * from product_master_clean;
+OK
+SKU000  Vaccine_Drug_SKU000     Injection       250mg   True    false   false   85.0    387.0   NULL    NULL
+SKU001  Analgesic_Drug_SKU001   Capsule 500mg   True    false   false   57.0    57.0    NULL    NULL
+SKU002  Analgesic_Drug_SKU002   Tablet  1g      False   false   false   106.0   239.0   NULL    NULL
+SKU003  Antibiotic_Drug_SKU003  Tablet  1g      False   false   false   137.0   152.0   NULL    NULL
+SKU004  Analgesic_Drug_SKU004   Tablet  500mg   True    false   false   141.0   443.0   NULL    NULL
+SKU005  Antibiotic_Drug_SKU005  Injection       1g      True    false   false   146.0   50.0    NULL    NULL
+SKU006  Antibiotic_Drug_SKU006  Injection       1g      True    false   false   67.0    33.0    NULL    NULL
+SKU007  Vaccine_Drug_SKU007     Tablet  250mg   True    false   false   147.0   152.0   NULL    NULL
+SKU008  Antibiotic_Drug_SKU008  Injection       250mg   False   false   false   68.0    321.0   NULL    NULL
+SKU009  Vaccine_Drug_SKU009     Tablet  250mg   False   false   false   147.0   148.0   NULL    NULL
+SKU010  Cardiac_Drug_SKU010     Capsule 500mg   True    false   false   108.0   430.0   NULL    NULL
+SKU011  Analgesic_Drug_SKU011   Tablet  1g      False   false   false   104.0   345.0   NULL    NULL
+SKU012  Antibiotic_Drug_SKU012  Tablet  500mg   True    false   false   113.0   391.0   NULL    NULL
+SKU013  Antibiotic_Drug_SKU013  Capsule 500mg   False   false   false   106.0   80.0    NULL    NULL
+SKU014  Antibiotic_Drug_SKU014  Tablet  250mg   True    false   false   158.0   315.0   NULL    NULL
+SKU015  Analgesic_Drug_SKU015   Capsule 500mg   True    false   false   79.0    359.0   NULL    NULL
+SKU016  Cardiac_Drug_SKU016     Injection       250mg   False   false   false   161.0   90.0    NULL    NULL
+SKU017  Antibiotic_Drug_SKU017  Injection       1g      True    false   false   179.0   477.0   NULL    NULL
+SKU018  Analgesic_Drug_SKU018   Capsule 1g      True    false   false   89.0    201.0   NULL    NULL
+SKU019  Vaccine_Drug_SKU019     Capsule 250mg   False   false   false   175.0   19.0    NULL    NULL
+SKU020  Analgesic_Drug_SKU020   Injection       250mg   True    false   false   111.0   459.0   NULL    NULL
+SKU021  Antibiotic_Drug_SKU021  Tablet  1g      True    false   false   82.0    347.0   NULL    NULL
+SKU022  Antibiotic_Drug_SKU022  Capsule 500mg   True    false   false   188.0   396.0   NULL    NULL
+SKU023  Vaccine_Drug_SKU023     Injection       500mg   False   false   false   162.0   470.0   NULL    NULL
+SKU024  Antibiotic_Drug_SKU024  Injection       250mg   True    false   false   200.0   122.0   NULL    NULL
+SKU025  Analgesic_Drug_SKU025   Tablet  250mg   False   false   false   68.0    273.0   NULL    NULL
+SKU026  Analgesic_Drug_SKU026   Tablet  1g      False   false   false   112.0   411.0   NULL    NULL
+SKU027  Antibiotic_Drug_SKU027  Capsule 500mg   False   false   false   158.0   220.0   NULL    NULL
+SKU028  Antibiotic_Drug_SKU028  Capsule 250mg   True    false   false   153.0   382.0   NULL    NULL
+SKU029  Antibiotic_Drug_SKU029  Tablet  1g      False   false   false   85.0    226.0   NULL    NULL
+Time taken: 0.054 seconds, Fetched: 30 row(s)
+hive> select * from product_master_clean;
+OK
+SKU000  Vaccine_Drug_SKU000     Injection       250mg   True    false   false   85.0    387.0   NULL    NULL
+SKU001  Analgesic_Drug_SKU001   Capsule 500mg   True    false   false   57.0    57.0    NULL    NULL
+SKU002  Analgesic_Drug_SKU002   Tablet  1g      False   false   false   106.0   239.0   NULL    NULL
+SKU003  Antibiotic_Drug_SKU003  Tablet  1g      False   false   false   137.0   152.0   NULL    NULL
+SKU004  Analgesic_Drug_SKU004   Tablet  500mg   True    false   false   141.0   443.0   NULL    NULL
+SKU005  Antibiotic_Drug_SKU005  Injection       1g      True    false   false   146.0   50.0    NULL    NULL
+SKU006  Antibiotic_Drug_SKU006  Injection       1g      True    false   false   67.0    33.0    NULL    NULL
+SKU007  Vaccine_Drug_SKU007     Tablet  250mg   True    false   false   147.0   152.0   NULL    NULL
+SKU008  Antibiotic_Drug_SKU008  Injection       250mg   False   false   false   68.0    321.0   NULL    NULL
+SKU009  Vaccine_Drug_SKU009     Tablet  250mg   False   false   false   147.0   148.0   NULL    NULL
+SKU010  Cardiac_Drug_SKU010     Capsule 500mg   True    false   false   108.0   430.0   NULL    NULL
+SKU011  Analgesic_Drug_SKU011   Tablet  1g      False   false   false   104.0   345.0   NULL    NULL
+SKU012  Antibiotic_Drug_SKU012  Tablet  500mg   True    false   false   113.0   391.0   NULL    NULL
+SKU013  Antibiotic_Drug_SKU013  Capsule 500mg   False   false   false   106.0   80.0    NULL    NULL
+SKU014  Antibiotic_Drug_SKU014  Tablet  250mg   True    false   false   158.0   315.0   NULL    NULL
+SKU015  Analgesic_Drug_SKU015   Capsule 500mg   True    false   false   79.0    359.0   NULL    NULL
+SKU016  Cardiac_Drug_SKU016     Injection       250mg   False   false   false   161.0   90.0    NULL    NULL
+SKU017  Antibiotic_Drug_SKU017  Injection       1g      True    false   false   179.0   477.0   NULL    NULL
+SKU018  Analgesic_Drug_SKU018   Capsule 1g      True    false   false   89.0    201.0   NULL    NULL
+SKU019  Vaccine_Drug_SKU019     Capsule 250mg   False   false   false   175.0   19.0    NULL    NULL
+SKU020  Analgesic_Drug_SKU020   Injection       250mg   True    false   false   111.0   459.0   NULL    NULL
+SKU021  Antibiotic_Drug_SKU021  Tablet  1g      True    false   false   82.0    347.0   NULL    NULL
+SKU022  Antibiotic_Drug_SKU022  Capsule 500mg   True    false   false   188.0   396.0   NULL    NULL
+SKU023  Vaccine_Drug_SKU023     Injection       500mg   False   false   false   162.0   470.0   NULL    NULL
+SKU024  Antibiotic_Drug_SKU024  Injection       250mg   True    false   false   200.0   122.0   NULL    NULL
+SKU025  Analgesic_Drug_SKU025   Tablet  250mg   False   false   false   68.0    273.0   NULL    NULL
+SKU026  Analgesic_Drug_SKU026   Tablet  1g      False   false   false   112.0   411.0   NULL    NULL
+SKU027  Antibiotic_Drug_SKU027  Capsule 500mg   False   false   false   158.0   220.0   NULL    NULL
+SKU028  Antibiotic_Drug_SKU028  Capsule 250mg   True    false   false   153.0   382.0   NULL    NULL
+SKU029  Antibiotic_Drug_SKU029  Tablet  1g      False   false   false   85.0    226.0   NULL    NULL
+Time taken: 0.06 seconds, Fetched: 30 row(s)
+hive>
