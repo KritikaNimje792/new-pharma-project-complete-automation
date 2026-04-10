@@ -14,7 +14,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS temperature_streaming (
 )
 PARTITIONED BY (partition_date DATE)
 STORED AS PARQUET
-LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis_processed_data/temperature_streaming_data/';
+LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis/temperature';
 
 
 ✅ 3. SALES TABLE
@@ -30,7 +30,7 @@ CREATE EXTERNAL TABLE IF NOT EXISTS sales_streaming (
 )
 PARTITIONED BY (partition_date DATE)
 STORED AS PARQUET
-LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis_processed_data/sales_streaming_data/';
+LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis/sales';
 
 
 ✅ 4. INVENTORY TABLE
@@ -46,4 +46,4 @@ CREATE EXTERNAL TABLE IF NOT EXISTS inventory_streaming (
 )
 PARTITIONED BY (partition_date DATE)
 STORED AS PARQUET
-LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis_processed_data/inventory_streaming_data/';
+LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis/inventory';
