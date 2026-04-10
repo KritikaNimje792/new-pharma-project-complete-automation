@@ -1,0 +1,89 @@
+hive> CREATE DATABASE pharma_db_kritika;
+OK
+Time taken: 0.589 seconds
+hive> USE pharma_db_kritika;
+OK
+Time taken: 0.014 seconds
+hive> CREATE EXTERNAL TABLE product_master_raw (
+    >     product_sku STRING,
+    >     product_name STRING,
+    >     generic_name STRING,
+    >     category STRING,
+    >     dosage_form STRING,
+    >     strength STRING,
+    >     schedule STRING,
+    >     controlled_flag STRING,
+    >     cold_chain_required STRING,
+    >     min_temp_c STRING,
+    >     max_temp_c STRING,
+    >     reorder_point_units STRING,
+    >     unit_cost_inr STRING,
+    >     unit_price_mrp_inr STRING,
+    >     is_active STRING
+    > )
+    > ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY ','
+    > STORED AS TEXTFILE
+    > LOCATION '/user/hadoop/product_master';
+OK
+Time taken: 0.17 seconds
+hive> SELECT * FROM product_master_raw LIMIT 10;
+OK
+SKU000  Vaccine_Drug_SKU000     Vaccine Injection       250mg   True    True    0.00    0.00    85      387.00  NULL    NULL    NULL    NULL
+SKU001  Analgesic_Drug_SKU001   Analgesic       Capsule 500mg   True    False   0.00    0.00    57      57.00   NULL    NULL    NULL    NULL
+SKU002  Analgesic_Drug_SKU002   Analgesic       Tablet  1g      False   False   10.00   5.00    106     239.00  NULL    NULL    NULL    NULL
+SKU003  Antibiotic_Drug_SKU003  Antibiotic      Tablet  1g      False   False   10.00   5.00    137     152.00  NULL    NULL    NULL    NULL
+SKU004  Analgesic_Drug_SKU004   Analgesic       Tablet  500mg   True    False   0.00    0.00    141     443.00  NULL    NULL    NULL    NULL
+SKU005  Antibiotic_Drug_SKU005  Antibiotic      Injection       1g      True    True    0.00    0.00    146     50.00   NULL    NULL    NULL    NULL
+SKU006  Antibiotic_Drug_SKU006  Antibiotic      Injection       1g      True    False   0.00    0.00    67      33.00   NULL    NULL    NULL    NULL
+SKU007  Vaccine_Drug_SKU007     Vaccine Tablet  250mg   True    True    2.00    8.00    147     152.00  NULL    NULL    NULL    NULL
+SKU008  Antibiotic_Drug_SKU008  Antibiotic      Injection       250mg   False   False   0.00    0.00    68      321.00  NULL    NULL    NULL    NULL
+SKU009  Vaccine_Drug_SKU009     Vaccine Tablet  250mg   False   True    2.00    8.00    147     148.00  NULL    NULL    NULL    NULL
+Time taken: 1.242 seconds, Fetched: 10 row(s)
+hive> CREATE EXTERNAL TABLE qc_results_raw (
+    >     qc_id STRING,
+    >     batch_id STRING,
+    >     product_sku STRING,
+    >     test_datetime STRING,
+    >     potency_pct STRING,
+    >     overall_result STRING,
+    >     failure_reason STRING
+    > )
+    > ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+    > WITH SERDEPROPERTIES (
+    >     "separatorChar" = ",",
+    >     "quoteChar" = "\""
+    > )
+    > STORED AS TEXTFILE
+    > LOCATION '/user/hadoop/qc_results';
+OK
+Time taken: 0.059 seconds
+hive> SELECT qc_id, overall_result, failure_reason
+    > FROM qc_results_raw
+    > LIMIT 10;
+OK
+QC000   PASS
+QC001   PASS
+QC002   PASS
+QC003   PASS
+QC004   PASS
+QC005   PASS
+QC006   PASS
+QC007   PASS
+QC008   PASS
+QC009   PASS
+Time taken: 0.141 seconds, Fetched: 10 row(s)
+hive> SELECT * FROM qc_results_raw LIMIT 10;
+OK
+QC000   B039    SKU029  2026-03-22 17:32:56.961107      106.76060889    PASS
+QC001   B028    SKU008  2026-03-15 17:32:56.961128      102.30966326    PASS
+QC002   B015    SKU015  2026-03-19 17:32:56.961136      88.31934059     PASS
+QC003   B015    SKU008  2026-03-29 17:32:56.961142      82.32450062     PASS
+QC004   B020    SKU012  2026-03-17 17:32:56.961148      82.41732973     PASS
+QC005   B009    SKU017  2026-03-25 17:32:56.961153      81.92686552     PASS
+QC006   B026    SKU024  2026-03-21 17:32:56.961158      104.98673508    PASS
+QC007   B044    SKU015  2026-04-08 17:32:56.961163      106.41970018    PASS
+QC008   B022    SKU026  2026-03-26 17:32:56.961168      91.69959944     PASS
+QC009   B034    SKU007  2026-03-24 17:32:56.961173      96.38396929     PASS
+Time taken: 0.089 seconds, Fetched: 10 row(s)
+hive>
