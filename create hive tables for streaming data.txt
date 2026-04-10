@@ -1,0 +1,49 @@
+✅ 1. CREATE DATABASE
+CREATE DATABASE IF NOT EXISTS pharma_streaming_db;
+USE pharma_streaming_db;
+
+
+✅ 2. TEMPERATURE TABLE
+CREATE EXTERNAL TABLE IF NOT EXISTS temperature_streaming (
+    sensor_id STRING,
+    temperature DOUBLE,
+    humidity DOUBLE,
+    temperature_c DOUBLE,
+    unit STRING,
+    event_time TIMESTAMP
+)
+PARTITIONED BY (partition_date DATE)
+STORED AS PARQUET
+LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis_processed_data/temperature_streaming_data/';
+
+
+✅ 3. SALES TABLE
+CREATE EXTERNAL TABLE IF NOT EXISTS sales_streaming (
+    transaction_id STRING,
+    pharmacy_id STRING,
+    quantity_sold INT,
+    unit_price DOUBLE,
+    discount_pct DOUBLE,
+    revenue DOUBLE,
+    fulfillment_status STRING,
+    event_time TIMESTAMP
+)
+PARTITIONED BY (partition_date DATE)
+STORED AS PARQUET
+LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis_processed_data/sales_streaming_data/';
+
+
+✅ 4. INVENTORY TABLE
+CREATE EXTERNAL TABLE IF NOT EXISTS inventory_streaming (
+    event_id STRING,
+    distributor_id STRING,
+    product_sku STRING,
+    batch_id STRING,
+    change_type STRING,
+    quantity_delta INT,
+    current_stock INT,
+    event_time TIMESTAMP
+)
+PARTITIONED BY (partition_date DATE)
+STORED AS PARQUET
+LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis_processed_data/inventory_streaming_data/';
