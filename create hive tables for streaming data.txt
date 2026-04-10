@@ -45,3 +45,36 @@ CREATE TABLE pharma_streaming_db.inventory_streaming (
 USING PARQUET
 PARTITIONED BY (partition_date)
 LOCATION 's3://pharma-data-lake-kritika/streaming_kinesis/inventory';
+
+
+
+++++++++++++++++++++++++++++++++++++++
+VERIFY THE DATA IS GETTING TOREED IN THE SPARK DATASOURCES : 
+
+Spark master: yarn, Application Id: application_1775799336076_0024
+spark-sql (default)> show databases;
+default
+pharma_streaming_db
+Time taken: 3.023 seconds, Fetched 2 row(s)
+spark-sql (default)> show databases;
+default
+pharma_streaming_db
+Time taken: 0.056 seconds, Fetched 2 row(s)
+spark-sql (default)> use pharma_streaming_db;
+Time taken: 0.049 seconds
+spark-sql (pharma_streaming_db)> show tables;
+inventory_streaming
+sales_streaming
+temperature_streaming
+Time taken: 0.138 seconds, Fetched 3 row(s)
+spark-sql (pharma_streaming_db)> select * from inventory_streaming;
+IE128   D07     SKU014  B002    DISPATCH        -16     13      2026-03-27 17:32:57.020755      2026-03-27
+IE088   D07     SKU009  B010    RECEIPT 94      414     2026-03-26 17:32:57.020358      2026-03-26
+IE184   D07     SKU024  B009    RETURN  41      430     2026-03-16 17:32:57.02117       2026-03-16
+IE133   D05     SKU012  B006    RECEIPT 47      418     2026-04-08 17:32:57.020835      2026-04-08
+IE010   D08     SKU000  B043    RETURN  44      -12     2026-03-29 17:32:57.019639      2026-03-29
+IE104   D00     SKU015  B022    DISPATCH        59      299     2026-04-04 17:32:57.020487      2026-04-04
+Time taken: 12.501 seconds, Fetched 6 row(s)
+spark-sql (pharma_streaming_db)> exit
+
+
