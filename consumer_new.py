@@ -134,13 +134,25 @@ temp_query = temp_clean.writeStream \
     .start()
 
 # Sales Stream
-sales_query = sales_clean.writeStream \
-    .format("parquet") \
-    .outputMode("append") \
-    .option("path", "s3://pharma-data-lake-kritika/streaming_kinesis/sales") \
-    .option("checkpointLocation", "s3://pharma-data-lake-kritika/checkpoints/sales/") \
-    .trigger(processingTime="60 seconds") \
-    .start()
+sales_clean = sales_df \
+    .withColumn("quantity_sold", col("quantity_sold").cast("int")) \
+    .withColumn("unit_price", col("unit_price").cast("double")) \
+    .withColumn("discount_pct", col("discount_pct").cast("double")) \
+    .withColumn("revenue", col("revenue").cast("double")) \
+    .filter((col("quantity_sold") > 0) & (col("unit_price") > 0)) \
+    .select(
+        "transaction_id",
+        "pharmacy_id",
+        "product_sku",   # ✅ ADD THIS
+        "batch_id",      # ✅ ADD THIS
+        "quantity_sold",
+        "unit_price",
+        "discount_pct",
+        "revenue",
+        "fulfillment_status",
+        "event_time",
+        "partition_date"
+    )
 
 # Inventory Stream
 inventory_query = inventory_clean.writeStream \
