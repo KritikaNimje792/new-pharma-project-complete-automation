@@ -1,0 +1,86 @@
+CREATE EXTERNAL TABLE product_master_raw (
+    product_sku STRING,
+    product_name STRING,
+    category STRING,
+    dosage_form STRING,
+    strength STRING,
+    controlled_flag STRING,
+    cold_chain_required STRING,
+    min_temp_c STRING,
+    max_temp_c STRING,
+    reorder_point_units STRING,
+    unit_price_mrp_inr STRING
+)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+    "separatorChar" = ",",
+    "quoteChar" = "\""
+)
+STORED AS TEXTFILE
+LOCATION '/user/hadoop/product_master';
+
+CREATE TABLE pharma_db_kritika.product_master_clean
+STORED AS PARQUET
+AS
+SELECT
+    product_sku,
+    product_name,
+    category,
+    dosage_form,
+    strength,
+ 
+    /* Controlled drug flag */
+    CASE
+        WHEN LOWER(TRIM(controlled_flag)) IN ('true', '1') THEN TRUE
+        ELSE FALSE
+    END AS controlled_flag,
+ 
+    /* Cold chain requirement */
+    CASE
+        WHEN LOWER(TRIM(cold_chain_required)) IN ('true', '1') THEN TRUE
+        ELSE FALSE
+    END AS cold_chain_required,
+ 
+    /* Temperature handling */
+    CAST(NULLIF(TRIM(min_temp_c), '') AS DOUBLE) AS min_temp_c,
+    CAST(NULLIF(TRIM(max_temp_c), '') AS DOUBLE) AS max_temp_c,
+ 
+    /* Numeric cleaning */
+    CAST(NULLIF(TRIM(reorder_point_units), '') AS INT) AS reorder_point_units,
+    CAST(NULLIF(TRIM(unit_price_mrp_inr), '') AS DOUBLE) AS unit_price
+ 
+FROM pharma_db_kritika.product_master_raw;
+
+
+CREATE TABLE pharma_db_kritika.product_master_valid
+STORED AS PARQUET
+AS
+SELECT *
+FROM pharma_db_kritika.product_master_clean
+WHERE
+ 
+    /* Mandatory fields */
+    product_sku IS NOT NULL
+    AND product_name IS NOT NULL
+    AND category IS NOT NULL
+    AND dosage_form IS NOT NULL
+ 
+    /* Price validation */
+    AND unit_price IS NOT NULL
+    AND unit_price > 0
+ 
+    /* Reorder point validation */
+    AND (reorder_point_units IS NULL OR reorder_point_units >= 0)
+ 
+    /* Temperature validation */
+    AND (
+        (min_temp_c IS NULL AND max_temp_c IS NULL)
+        OR (min_temp_c <= max_temp_c)
+    )
+ 
+    /* Cold chain validation */
+    AND (
+        cold_chain_required = FALSE
+        OR (min_temp_c IS NOT NULL AND max_temp_c IS NOT NULL)
+    );
+
