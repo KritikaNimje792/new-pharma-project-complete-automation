@@ -1,0 +1,103 @@
+hive> DROP TABLE IF EXISTS qc_results_raw;
+OK
+Time taken: 0.086 seconds
+hive> CREATE EXTERNAL TABLE qc_results_raw (
+    >     qc_id STRING,
+    >     batch_id STRING,
+    >     product_sku STRING,
+    >     test_datetime STRING,
+    >     potency_pct STRING,
+    >     overall_result STRING,
+    >     failure_reason STRING
+    > )
+    > ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY ','
+    > STORED AS TEXTFILE
+    > LOCATION '/user/hadoop/qc_results';
+OK
+Time taken: 0.059 seconds
+hive> CREATE TABLE qc_results_clean AS
+    > SELECT
+    >     qc_id,
+    >     batch_id,
+    >     product_sku,
+    >     CAST(test_datetime AS TIMESTAMP) AS test_datetime,
+    >     CAST(potency_pct AS DOUBLE) AS potency_pct,
+    >     CASE
+    >         WHEN UPPER(TRIM(overall_result)) = 'PASS' THEN 'PASS'
+    >         WHEN UPPER(TRIM(overall_result)) = 'FAIL' THEN 'FAIL'
+    >         ELSE NULL
+    >     END AS overall_result,
+    >     NULLIF(TRIM(failure_reason), '') AS failure_reason
+    > FROM qc_results_raw;
+Query ID = hadoop_20260410111442_53333409-a640-4ad4-91c0-2bb1df12a792
+Total jobs = 1
+Launching Job 1 out of 1
+Tez session was closed. Reopening...
+Session re-established.
+Session re-established.
+Status: Running (Executing on YARN cluster with App id application_1775799336076_0030)
+
+Map 1: -/-
+Map 1: 0/1
+Map 1: 0(+1)/1
+Map 1: 1/1
+Moving data to directory hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hive/warehouse/pharma_db_kritika.db/qc_results_clean
+OK
+Time taken: 11.616 seconds
+hive> CREATE TABLE qc_results_valid AS
+    > SELECT *
+    > FROM qc_results_clean
+    > WHERE
+    >     overall_result IN ('PASS', 'FAIL')
+    >     AND potency_pct BETWEEN 80 AND 120
+    >     AND (
+    >         overall_result = 'PASS'
+    >         OR (overall_result = 'FAIL' AND failure_reason IS NOT NULL)
+    >     );
+Query ID = hadoop_20260410111548_15e10bfc-8da6-442c-baae-8153d35c547e
+Total jobs = 1
+Launching Job 1 out of 1
+Status: Running (Executing on YARN cluster with App id application_1775799336076_0030)
+
+Map 1: -/-
+Map 1: 0/1
+Map 1: 0(+1)/1
+Map 1: 1/1
+Moving data to directory hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hive/warehouse/pharma_db_kritika.db/qc_results_valid
+OK
+Time taken: 5.739 seconds
+hive> CREATE TABLE qc_results_invalid AS
+    > SELECT *
+    > FROM qc_results_clean
+    > WHERE
+    >     overall_result NOT IN ('PASS', 'FAIL')
+    >     OR potency_pct NOT BETWEEN 80 AND 120
+    >     OR (
+    >         overall_result = 'FAIL' AND failure_reason IS NULL
+    >     );
+Query ID = hadoop_20260410111641_997b9eb4-8d52-47f2-a8d0-2be6719c192e
+Total jobs = 1
+Launching Job 1 out of 1
+Status: Running (Executing on YARN cluster with App id application_1775799336076_0030)
+
+Map 1: -/-
+Map 1: 0/1
+Map 1: 0(+1)/1
+Map 1: 1/1
+Moving data to directory hdfs://ip-172-31-27-188.ap-south-1.compute.internal:8020/user/hive/warehouse/pharma_db_kritika.db/qc_results_invalid
+OK
+Time taken: 4.548 seconds
+hive> SELECT COUNT(*) FROM qc_results_clean;
+OK
+200
+Time taken: 0.086 seconds, Fetched: 1 row(s)
+hive> SELECT COUNT(*) FROM qc_results_valid;
+OK
+183
+Time taken: 0.061 seconds, Fetched: 1 row(s)
+hive> SELECT COUNT(*) FROM qc_results_invalid;
+OK
+17
+Time taken: 0.059 seconds, Fetched: 1 row(s)
+hive>
